@@ -1,7 +1,7 @@
 
 import axios from 'axios'
 
-const URI_API_PERSONS = 'https://agile-tundra-97025.herokuapp.com/api/persons/'
+const URI_API_PERSONS = 'https://phonebook-backend-express.herokuapp.com/api/persons/'
 
 
 export const getAllPersons = async ()  => {
