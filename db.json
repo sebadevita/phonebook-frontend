@@ -1,0 +1,19 @@
+{
+  "persons": [
+    {
+      "name": "Dan Abramov",
+      "number": "12-43-234345",
+      "id": 3
+    },
+    {
+      "id": 1,
+      "name": "Arto Hellas",
+      "number": "12-34567-8"
+    },
+    {
+      "id": 99,
+      "name": "Adam Smith",
+      "number": "12-34567-8"
+    }
+  ]
+}
