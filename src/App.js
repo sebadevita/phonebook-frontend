@@ -45,7 +45,11 @@ const App = () => {
       setNewName("")
       setNewNumber("")
       } catch (error) {
-        showErrorMessage(`${newName} was already been added to the phonebook`)
+        // showErrorMessage(`${newName} was already been added to the phonebook`)
+
+        //Mejorar mensajes de errores especificos
+
+        showErrorMessage((error.response.data.error))
       }
     } else {
       if (
@@ -90,13 +94,14 @@ const App = () => {
      if (confirmDelete(idPerson)){
       try {
         await PersonService.deletePerson(findById(idPerson).id)
-      setPersons(await PersonService.getAllPersons())
       } catch (error) {
         showErrorMessage(`'Information of ${findById(idPerson).name}' has already been removed from server`)
         
       }
-     }
-
+    }
+    
+    setPersons(await PersonService.getAllPersons())
+    
     }
 
     const showErrorMessage = (message) => {
