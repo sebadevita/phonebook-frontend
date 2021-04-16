@@ -1,7 +1,6 @@
-import React from "react"
+import React from 'react'
 
-export const PersonFilter = ({filterName, handleFilterName}) => {
-  
+export const PersonFilter = ({ filterName, handleFilterName }) => {
   return (
     <div>
       <label>filter shown with: </label>
