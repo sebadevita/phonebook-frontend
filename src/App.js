@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react'
 
-//Components
-import { PersonList } from "./components/PersonList"
-import { PersonForm } from "./components/PersonForm"
-import { PersonFilter } from "./components/PersonFilter"
+// Components
+import { PersonList } from './components/PersonList'
+import { PersonForm } from './components/PersonForm'
+import { PersonFilter } from './components/PersonFilter'
 import { Notification } from './components/Notification'
 import { Error } from './components/Error'
 
-//PersonService
+// PersonService
 
-import * as PersonService from "./services/personService"
+import * as PersonService from './services/personService'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState("")
-  const [newNumber, setNewNumber] = useState("")
-  const [filterName, setFilterName] = useState("")
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filterName, setFilterName] = useState('')
   const [sucessMessage, setSucessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData () {
       setPersons(await PersonService.getAllPersons())
     }
 
@@ -34,20 +34,20 @@ const App = () => {
       const personObject = {
         id: persons.length + 1,
         name: newName,
-        number: newNumber,
+        number: newNumber
       }
 
       try {
         const newPerson = await PersonService.createPerson(personObject)
 
-      setPersons(persons.concat(newPerson))
-      showSucessMessage(`${newName} was added to the phonebook!`)
-      setNewName("")
-      setNewNumber("")
+        setPersons(persons.concat(newPerson))
+        showSucessMessage(`${newName} was added to the phonebook!`)
+        setNewName('')
+        setNewNumber('')
       } catch (error) {
         // showErrorMessage(`${newName} was already been added to the phonebook`)
 
-        //Mejorar mensajes de errores especificos
+        // Mejorar mensajes de errores especificos
 
         showErrorMessage((error.response.data.error))
       }
@@ -58,24 +58,25 @@ const App = () => {
         )
       ) {
         const person = persons.find((person) => person.name === newName)
-        const changedPerson = { ...person, number: newNumber }
+        if (person.number.length >= 8) {
+          const changedPerson = { ...person, number: newNumber }
 
-        try {
-          await PersonService.updatePerson(
-            persons.find((person) => person.name === newName).id,
-            changedPerson
-          )
+          try {
+            await PersonService.updatePerson(
+              persons.find((person) => person.name === newName).id,
+              changedPerson
+            )
 
-          setPersons(await PersonService.getAllPersons())
-          showSucessMessage(`${newName}'s number was changed!`)
-          setNewName("")
-          setNewNumber("")
-
-        } catch (error) {
-          showErrorMessage(`'Information of ${findByName(newName).name}' has already been removed from server`)
-
+            setPersons(await PersonService.getAllPersons())
+            showSucessMessage(`${newName}'s number was changed!`)
+            setNewName('')
+            setNewNumber('')
+          } catch (error) {
+            showErrorMessage(`'Information of ${findByName(newName).name}' has already been removed from server`)
+          }
+        } else {
+          showErrorMessage('number must have min 8 characters')
         }
-        
       }
     }
   }
@@ -83,36 +84,31 @@ const App = () => {
   const showSucessMessage = (message) => {
     setSucessMessage(message)
 
-    setTimeout(() =>{
+    setTimeout(() => {
       setSucessMessage(null)
-
     }, 2000)
-    
   }
 
   const deletePerson = async (idPerson) => {
-     if (confirmDelete(idPerson)){
+    if (confirmDelete(idPerson)) {
       try {
         await PersonService.deletePerson(findById(idPerson).id)
       } catch (error) {
         showErrorMessage(`'Information of ${findById(idPerson).name}' has already been removed from server`)
-        
       }
     }
-    
-    setPersons(await PersonService.getAllPersons())
-    
-    }
 
-    const showErrorMessage = (message) => {
-      setErrorMessage(message)
-  
-      setTimeout(() =>{
-        setErrorMessage(null)
-  
-      }, 2000)
-    }
-  
+    setPersons(await PersonService.getAllPersons())
+  }
+
+  const showErrorMessage = (message) => {
+    setErrorMessage(message)
+
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 2000)
+  }
+
   const confirmDelete = (idPerson) => {
     return (window.confirm(`Delete ${findById(idPerson).name} ?`))
   }
@@ -121,7 +117,7 @@ const App = () => {
     return persons.find((person) => person.id === idPerson)
   }
 
-  const findByName = (name) =>{
+  const findByName = (name) => {
     return persons.find((person) => person.name === name)
   }
 
@@ -153,8 +149,8 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
 
-      <Notification message={sucessMessage}/>
-      <Error message={errorMessage}/>
+      <Notification message={sucessMessage} />
+      <Error message={errorMessage} />
 
       <PersonFilter
         filterName={filterName}
